@@ -13,20 +13,29 @@ function onIdle(me, enemy, game) {
   // ===== 1. BULLET DODGE =====
   if (enemyBullet && isComing(myPos, enemyBullet.position, enemyBullet.direction)) {
     _dodging = true;
-    var side = perpOpen(myPos, enemyBullet.direction, map);
+    var bDir = enemyBullet.direction;
+    var bVert = bDir === "up" || bDir === "down";
+
+    // If already facing a safe direction (perpendicular to bullet), move NOW
+    var facingSafe = bVert ? (myDir === "left" || myDir === "right")
+                           : (myDir === "up" || myDir === "down");
+    if (facingSafe && isOpen(add(myPos, delta(myDir)), map)) {
+      me.go();
+      return;
+    }
+
+    // Find best perpendicular escape and turn toward it
+    var side = perpOpen(myPos, bDir, map);
     if (side) {
-      moveToward(me, myDir, myPos, add(myPos, delta(side)));
+      if (myDir === side) { me.go(); return; }
+      me.turn(turnDirection(myDir, side));
       return;
     }
-    // Fallback: reverse direction
-    var back = turnDirection(turnDirection(myDir, "right"), "right");
-    if (isOpen(add(myPos, delta(back)), map)) {
-      if (myDir === back) { me.go(); return; }
-      me.turn(turnDirection(myDir, back));
-      return;
-    }
-    if (isOpen(add(myPos, delta(myDir)), map)) { me.go(); return; }
-    me.turn("right");
+
+    // Fallback: turn to any perpendicular or keep turning
+    var perpDirs = bVert ? ["left", "right"] : ["up", "down"];
+    if (myDir === perpDirs[0]) { me.go(); return; }
+    me.turn(turnDirection(myDir, perpDirs[0]));
     return;
   }
   _dodging = false;
