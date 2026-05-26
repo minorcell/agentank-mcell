@@ -29,7 +29,7 @@ function onIdle(me, enemy, game) {
     me.turn("right");
     return;
   }
-  if (!enemyBullet) { _dodging = false; }
+  _dodging = false;
 
   // ===== 2. COMBAT =====
   if (enemyTank && !_dodging) {
