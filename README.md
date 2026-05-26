@@ -37,7 +37,7 @@ bash scripts/publish.sh "change description"
 bash scripts/check.sh 20
 ```
 
-等 **15+ 局**再判断效果，样本太少不可信。crash 率 25–35% 是平台底噪，与代码无关。
+等 **40+ 局**再判断效果，样本不足不可信。效果不达预期直接 `git revert`，不在坏改动上叠加补丁。crash 率 25–35% 是平台底噪，与代码无关。
 
 ## 版本记录
 

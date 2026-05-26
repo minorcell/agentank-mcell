@@ -60,7 +60,7 @@ bash scripts/publish.sh "change description"
 bash scripts/check.sh 20
 ```
 
-等 15+ 局再判断效果，样本太少不可信。
+等 **40+ 局**再判断效果，样本不足不可信。效果不佳直接 `git revert`，不要在坏改动上叠加补丁。
 
 ## Key findings
 
@@ -74,4 +74,4 @@ crash 率约 25-35% 是平台底噪，与代码无关。
 
 ## Philosophy
 
-快准狠。一次只改一件事，改完看数据。不堆条件。
+**小改 → 验证 → 再改。** 每次只动一件事，40+ 局数据说话。没有数据支撑不做下一步。效果不达预期，果断 revert，不在坏改动上叠加修补。
