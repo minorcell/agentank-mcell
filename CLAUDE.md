@@ -43,8 +43,8 @@ if (freezeReady && !me.bullet) { me.freeze(); return; }  // 再 freeze
 
 ## Priority order
 
-1. Bullet dodge
-2. Combat（有清晰射线 → 开火；无清晰射线且 star 更近 → 抢 star）
+1. Bullet dodge — 面向安全方向直接移动，否则转向横移；弹道检测含同行/列 + 距 1 格预测
+2. Combat — 清晰射线 → 转向 → freeze(≤3 格) → 开火；子弹飞行中靠近/横移；无射线且 star 更近 → 抢 star
 3. Star（无敌人时）
 4. Hunt（最后见到的敌人位置）
 5. Explore（地图中心）
@@ -61,14 +61,6 @@ bash scripts/check.sh 20
 ```
 
 等 **40+ 局**再判断效果，样本不足不可信。效果不佳直接 `git revert`，不要在坏改动上叠加补丁。
-
-## Key findings
-
-| 版本 | 改动 | 结果 |
-|------|------|------|
-| v13 | BFS优先 + 开火后横移 | 胜率 +11% |
-| v17 | 修复 freeze 时序（先转向） | 胜率 +6% |
-| v22 | 无清晰射线时抢更近的 star | 待验证 |
 
 crash 率约 25-35% 是平台底噪，与代码无关。
 
