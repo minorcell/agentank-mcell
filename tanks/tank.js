@@ -145,8 +145,14 @@ function greedyMove(me, pos, dir, target, map) {
 function isComing(myPos, bulletPos, bulletDir) {
   var dx = bulletPos[0] - myPos[0];
   var dy = bulletPos[1] - myPos[1];
+  // Bullet already on our row/col, heading toward us
   if (dx === 0 && dy !== 0) return (bulletDir === "down" && dy < 0) || (bulletDir === "up" && dy > 0);
   if (dy === 0 && dx !== 0) return (bulletDir === "right" && dx < 0) || (bulletDir === "left" && dx > 0);
+  // Predict: bullet 1 cell off our row/col, heading across our path
+  if (Math.abs(dx) === 1 && bulletDir === "up"   && dy > 0) return true;
+  if (Math.abs(dx) === 1 && bulletDir === "down" && dy < 0) return true;
+  if (Math.abs(dy) === 1 && bulletDir === "left"  && dx > 0) return true;
+  if (Math.abs(dy) === 1 && bulletDir === "right" && dx < 0) return true;
   return false;
 }
 
