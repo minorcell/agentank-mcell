@@ -1,5 +1,6 @@
-// Persistent hunting memory
+// Persistent state
 var _huntTarget = null;
+var _dodging = false;
 
 function onIdle(me, enemy, game) {
   var myPos = me.tank.position;
@@ -11,6 +12,7 @@ function onIdle(me, enemy, game) {
 
   // ===== 1. BULLET DODGE =====
   if (enemyBullet && isComing(myPos, enemyBullet.position, enemyBullet.direction)) {
+    _dodging = true;
     var side = perpOpen(myPos, enemyBullet.direction, map);
     if (side) {
       moveToward(me, myDir, myPos, add(myPos, delta(side)));
@@ -27,9 +29,10 @@ function onIdle(me, enemy, game) {
     me.turn("right");
     return;
   }
+  if (!enemyBullet) { _dodging = false; }
 
   // ===== 2. COMBAT =====
-  if (enemyTank) {
+  if (enemyTank && !_dodging) {
     var ePos = enemyTank.position;
     _huntTarget = ePos;
     var dist = Math.abs(myPos[0] - ePos[0]) + Math.abs(myPos[1] - ePos[1]);
@@ -218,7 +221,7 @@ function add(p,d) { return [p[0]+d[0], p[1]+d[1]]; }
 function isOpen(p,m) {
   if (!m[p[0]]) return false;
   var c = m[p[0]][p[1]];
-  return c && c !== "x" && c !== "m";
+  return c && c !== "x" && c !== "m" && c !== "w" && c !== "#";
 }
 function samePos(a,b) { return a[0]===b[0] && a[1]===b[1]; }
 function key(p) { return p[0]+","+p[1]; }
