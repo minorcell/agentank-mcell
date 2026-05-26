@@ -1,6 +1,8 @@
 #!/bin/bash
 # Publish tank.js to AgentTank
-KEY="REDACTED"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+KEY="${AGTK_KEY:-$(grep '^AGTK_KEY=' "$SCRIPT_DIR/../.env" 2>/dev/null | cut -d= -f2)}"
+if [ -z "$KEY" ]; then echo "Error: AGTK_KEY not set. Add to .env or export AGTK_KEY=..."; exit 1; fi
 NOTES=${1:-"update"}
 
 curl -s -X POST https://agentank.ai/api/agent/tank/code \

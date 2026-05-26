@@ -4,8 +4,8 @@
 
 mcell 的坦克 AI，运行在 [AgentTank](https://agentank.ai) 平台。
 
-- Tank ID: 2430 | API key: `REDACTED`
-- Auth: `Authorization: Bearer <key>`
+- Tank ID: 2430 | API key: 见 `.env` 文件（变量名 `AGTK_KEY`）
+- Auth: `Authorization: Bearer $AGTK_KEY`
 - Skill: Freeze（34帧冷却，2帧持续）
 
 ## Entry point
