@@ -97,15 +97,7 @@ function onIdle(me, enemy, game) {
     return;
   }
 
-  // ===== 3. STAR (before hunt - more immediate value) =====
-  if (game.star) {
-    var step = nextStep(myPos, game.star, map);
-    if (step) { moveToward(me, myDir, myPos, step); return; }
-    if (!greedyMove(me, myPos, myDir, game.star, map)) { return; }
-    return;
-  }
-
-  // ===== 4. HUNT =====
+  // ===== 3. HUNT =====
   if (_huntTarget) {
     var step = nextStep(myPos, _huntTarget, map);
     if (step) { moveToward(me, myDir, myPos, step); return; }
@@ -113,12 +105,24 @@ function onIdle(me, enemy, game) {
     return;
   }
 
-  // ===== 5. EXPLORE =====
+  // ===== 4. EXPLORE =====
   var cx = Math.floor(map.length / 2);
   var cy = Math.floor((map[0] ? map[0].length : 15) / 2);
   var step = nextStep(myPos, [cx, cy], map);
   if (step) { moveToward(me, myDir, myPos, step); return; }
   if (!greedyMove(me, myPos, myDir, [cx, cy], map)) { return; }
+
+  // ===== 5. STAR (only if very close, grab on the move) =====
+  if (game.star) {
+    var starDist = Math.abs(myPos[0] - game.star[0]) + Math.abs(myPos[1] - game.star[1]);
+    if (starDist <= 3) {
+      var starStep = nextStep(myPos, game.star, map);
+      if (starStep) { moveToward(me, myDir, myPos, starStep); return; }
+      if (!greedyMove(me, myPos, myDir, game.star, map)) { return; }
+      return;
+    }
+  }
+
   // ===== 6. PATROL =====
   patrol(me, myDir, myPos, map);
 }
